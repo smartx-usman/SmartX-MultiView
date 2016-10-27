@@ -1,0 +1,221 @@
+/**
+ * Module dependencies.
+ */
+
+var express = require('express');
+var ArticleProvider = require('./resource-mongodb').ArticleProvider;
+var RouteProvider = require('./route-mongodb').RouteProvider;
+var BoxProvider = require('./multiview-hierarchical-mongodb').BoxProvider;
+var UserProvider = require('./user-mongodb').UserProvider;
+var http = require("http");
+var app = module.exports = express.createServer();
+var client = require('socket.io').listen(8080).sockets;
+// Configuration
+
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(require('stylus').middleware({ src: __dirname + '/public' }));
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+});
+
+app.configure('production', function(){
+  app.use(express.errorHandler()); 
+});
+
+//Define Application Routes
+// index page
+app.get('/index', function(req, res){
+    res.render('index.jade', 
+	{ title: 'Home'}
+    )
+});
+
+//MultiView Data Integration & View Access
+var resourceProvider = new ResourceProvider();
+app.get('/multiviewops', function(req, res){
+    var boxList      = null;
+    var switchList   = null;
+    var instanceList = null;
+    var serviceList  = 0;
+    resourceProvider.getpBoxList( function(error,boxobj)
+    {
+	boxList = boxobj;
+        console.log( boxList);
+	showView();
+   /* res.render('multiviewops.jade',{locals: {
+		boxes: JSON.stringify(boxesr)	
+	}, 
+	title: 'Resource-Centric Hierarchical View'}
+    )*/
+    })
+    resourceProvider.getvSwitchList(function(error, switchobj)
+    {
+    	switchList = switchobj;
+        console.log(switchList);
+	showView();
+    })
+
+    resourceProvider.getvBoxList(function(error, instanceobj)
+    {
+        instanceList = instanceobj;
+        console.log(instanceList);
+        showView();
+    })
+
+    /*resourceProvider.getServiceList(function(error, serviceobj)
+    {
+        serviceList = serviceobj;
+        console.log(serviceList);
+        showView();
+    })*/
+
+    function showView()
+    {
+        if(boxList !== null && switchList !== null && instanceList !== null && serviceList !==null)
+	{
+        	console.log('here we are in Rendering');
+    		res.render('multiviewops.jade',{locals: {
+                	boxList: JSON.stringify(boxList),
+			switchList: JSON.stringify(switchList),
+			instanceList: JSON.stringify(instanceList),
+			serviceList:JSON.stringify(serviceList)
+        	},
+        	title: 'Resource-Centric Hierarchical View'}
+    		)
+	}
+    }
+});
+
+app.get('/example', function(req, res){
+    res.render('example.jade',
+        { title: 'Example View'}
+    )
+});
+var userProvider = new UserProvider();
+app.get('/', function(req, res){
+    res.render('login.jade',{title: 'Login'})
+});
+client.on('connection', function(socket){
+    socket.on('login', function(login_info){
+       var this_user_name=login_info.user_name,
+           this_user_password=login_info.user_password;
+       if(this_user_name === '' || this_user_password === ''){
+           socket.emit('alert', 'You must fill in both fields');
+       }else{
+           userProvider.find(function (err, listusers){
+               if(err) throw err;
+               var found = false,
+                   location =-1;
+               if (listusers.length){
+                   for (var i in listusers){
+                       if(listusers[i].username === this_user_name){
+                          found = true;
+                          if(listusers[i].password === this_user_password){
+                             if(listusers[i].role === 'operator'){
+                                socket.emit('redirect', 'http://103.22.221.55:3006/menuops');
+                             }
+                             else{
+                                 socket.emit('redirect', 'http://103.22.221.55:3006/menudev');
+                             }
+                          }else{
+                             socket.emit('alert', 'Please retry password');
+                          }
+                          break;
+                       }
+                    }
+                    if(!found){
+                       socket.emit('alert', 'Sorry, We could not find you.');
+                    }
+                }
+ 
+app.get('/menu', function(req, res){
+    res.render('menu.jade',
+        { title: 'Menu'}
+    )
+});
+
+
+//Query and Draw Boxes and Path Status on Map
+var articleProvider = new ArticleProvider();
+app.get('/map', function(req, res){
+    var bstatus;
+    articleProvider.findAll( function(error,bstatus,resp)
+    {
+        console.log(bstatus);
+        articleProvider.findPLinks( function(error,pstatus)
+    	{
+        res.render('map.jade', { locals: {
+                    boxes: JSON.stringify(bstatus),
+                    plinks: JSON.stringify(pstatus)
+                 }
+        });
+       });
+    })
+});
+
+//Draw the Traceroute Input Form
+var routeProvider = new RouteProvider();
+app.get('/routes', function(req, res){
+    var html = 	'<form action="/route" method="get">' +
+                '<table>'+
+		'<tr>'+
+	        '<th colspan="2" style="font-size: 18px; color: #4CAF50;"><h1>Draw Routes</h1></th>'+
+		'</tr>'+
+		'<tr>'+
+               	'<td>Enter Source Box IP: </td>' + 
+               	'<td><input type="text" name="src" placeholder="" /></td>' +
+               	'</tr>'+
+		'<tr>'+
+	       	'<td>Enter Destination Box IP: </td>' +
+	       	'<td><input type="text" name="dest" placeholder="" /></td>' +
+		'</tr>'+
+		'<tr>'+
+		'<tr></tr>'+
+		'<td></td>'+
+               	'<td><button type="submit">Show</button></td>' + 
+		'</tr>'+
+		'</table>'+
+            '</form>';
+   res.send(html);
+});
+
+//Query and Draw the Traceroute
+app.get('/route', function(req, res){
+   var fstatus;
+   src  = req.query['src'];
+   dest = req.query['dest'];
+   console.log(src);
+   console.log(dest);
+   routeProvider.findOne( function(error,fstatus)
+   {
+	console.log('|******************************************************|');
+        console.log('|**************Forward Direction Result****************|');
+        console.log(fstatus);
+        console.log('|******************************************************|');
+        routeProvider.findTwo( function(error,rstatus)
+        {
+	   console.log('|******************************************************|');
+	   console.log('|**************Reverse Direction Result****************|');
+	   console.log(rstatus);
+	   console.log('|******************************************************|');
+           res.render('routes.jade', { locals: 
+		 {
+                    forward: JSON.stringify(fstatus),
+                    reverse: JSON.stringify(rstatus)
+                 }
+             });
+       });
+   })
+});
+
+app.set('domain', '0.0.0.0')
+app.listen(3006);
+console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
