@@ -252,6 +252,8 @@
       for(var i=0; i<nodes.length; i++){
       if(nodes[i].id == nodeId){
       switch (nodes[i].level){
+	  case 0: //Network
+	  window.parent.getNetworkFlow(nodes[i]);
       case 1: //Box
       window.parent.getBoxFlow(nodes[i]);
       break;
@@ -299,6 +301,6 @@
   <body onload="draw()">
     <p></p>
     <p></p>
-    <div id="mynetwork" align="center"></div>
+	<div id="mynetwork" align="center"></div>
   </body>
 </html>
