@@ -16,7 +16,17 @@ ResourceProvider.prototype.getUsers = function(callback)
     {
         var collection = db.collection("configuration-multiview-users");
         collection.find().toArray(function(err, users){
+
+
+		// Test for Open API Definition
+	//	var fso = enw ActiveXObject('Scripting.FileSystemObject');
+	//	var fileObj = fso.CreateTextFile("~/openapi/test.txt", true);
+	//	fileObj.WriteLine("This is the test files!!!\n");
+	//	fileObj.Close();
+
+
                 callback(null,users);
+		
         });
     });
 };

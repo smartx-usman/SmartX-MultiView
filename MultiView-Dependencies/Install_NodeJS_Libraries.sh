@@ -13,17 +13,14 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #
-# Name          : Install_Dependencies.sh
-# Description   : Script for Installing Dependencies
+# Name          : Install_NodeJS_Libraries.sh
+# Description   : Script for Installing Java
 #
 # Created by    : usman@smartx.kr
 # Version       : 0.1
 # Last Update   : November, 2016
 
-#Update Management IP according to your requirement
-MGMT_IP=""
-
-echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] MultiView Installation Started..."
-
-
-MultiView-Scripts/Install_Dependencies.sh MGMT_IP
+echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] NodeJS Libraries Installing..."
+currentDir=`pwd`
+cd Visibility-Visualization\pvcT-Visualization
+npm install

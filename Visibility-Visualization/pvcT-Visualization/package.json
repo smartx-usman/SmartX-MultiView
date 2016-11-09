@@ -1,14 +1,25 @@
 {
-    "name": "resource-visualization"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.4.3"
-    , "stylus": ">= 0.0.1"
-    , "jade": ">= 0.0.1"
-    , "mongodb": "*"
-    , "dateformat": "*"
-    , "canvas": "*"
-    , "leaflet-headless": "*"
+  "author": "usman <usman@smartx.kr>",
+  "name": "visibility",
+  "version": "0.0.2",
+  "repository": {
+    "url": ""
+  },
+  "main": "server.js",
+  "dependencies": {
+    "express": "3.4.4",
+    "stylus": ">= 0.0.1",
+    "jade": ">= 0.0.1",
+    "mongodb": "*",
+    "dateformat": "*",
+    "vis": "*",
+    "googleanalytics": "*",
+    "socket.io": "*"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
   }
 }
+

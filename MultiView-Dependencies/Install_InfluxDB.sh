@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2015 SmartX Collaboration (GIST NetCS). All rights reserved.
+# Copyright 2016 SmartX Collaboration (GIST NetCS). All rights reserved.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -18,4 +18,17 @@
 #
 # Created by    : usman@smartx.kr
 # Version       : 0.1
-# Last Update   : October, 2016
+# Last Update   : November, 2016
+
+MGMT_IP=$1
+
+influxdb=`dpkg -l | grep influx`
+if [ "$influxdb" == "" ]; then
+echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] InfluxDB Installing..."
+wget --secure-protocol=TLSv1 https://dl.influxdata.com/influxdb/releases/influxdb_1.0.2_amd64.deb
+sudo dpkg -i influxdb_1.0.2_amd64.deb
+echo `influx -version`
+else
+echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] InfluxDB Already Installed."
+echo `influx -version`
+fi

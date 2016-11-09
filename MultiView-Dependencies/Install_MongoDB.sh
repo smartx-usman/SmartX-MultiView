@@ -19,3 +19,13 @@
 # Created by    : usman@smartx.kr
 # Version       : 0.1
 # Last Update   : October, 2016
+
+
+MGMT_IP=$1
+echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] MongoDB Installing..."
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+sed -i "s/bindIp: 127.0.0.1/bindIp: $MGMT_IP/g" /etc/mongod.conf
+service mongod restart

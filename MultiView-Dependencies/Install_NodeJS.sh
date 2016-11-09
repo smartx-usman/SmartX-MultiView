@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2016 SmartX Collaboration (GIST NetCS). All rights reserved.
+# Copyright 2015 SmartX Collaboration (GIST NetCS). All rights reserved.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -13,17 +13,19 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #
-# Name          : Install_Dependencies.sh
-# Description   : Script for Installing Dependencies
+# Name          : Install_NodeJS.sh
+# Description   : Script for Installing Java
 #
 # Created by    : usman@smartx.kr
 # Version       : 0.1
-# Last Update   : November, 2016
+# Last Update   : October, 2016
 
-#Update Management IP according to your requirement
-MGMT_IP=""
-
-echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] MultiView Installation Started..."
-
-
-MultiView-Scripts/Install_Dependencies.sh MGMT_IP
+NodeJSExist=`dpkg -l | grep  nodejs`
+if [ "$NodeJSExist" == "" ]; then
+echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] NodeJS Installing..."
+apt-get install -y nodejs npm
+ln -s /usr/bin/nodejs /usr/bin/node
+else
+echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] NodeJS Already Installed."
+echo `node -v`
+fi

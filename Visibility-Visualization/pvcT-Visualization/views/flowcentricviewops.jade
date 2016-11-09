@@ -249,6 +249,8 @@ html
       for(var i=0; i<nodes.length; i++){
       if(nodes[i].id == nodeId){
       switch (nodes[i].level){
+      case 0: //Network
+      window.parent.getNetworkFlow(nodes[i]);
       case 1: //Box
       window.parent.getBoxFlow(nodes[i]);
       break;
@@ -292,6 +294,8 @@ html
       });
       }
   body(onload='draw()')
+    #ViewName(align='center')
+      h1(style='background-color:red;color:black;padding:20px;') Flow-Centric View
     p
     p
     #mynetwork(align='center')
