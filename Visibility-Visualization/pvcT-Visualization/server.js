@@ -8,14 +8,18 @@ var express = require('express');
 var BoxProvider = require('./MultiView-DataAPI').BoxProvider;
 //var UserProvider = require('./user-mongodb').UserProvider;
 var http = require("http");
-var app = module.exports = express.createServer();
+var app = express();
+//var app = module.exports = express.createServer();
 var client = require('socket.io').listen(8080).sockets;
 // Configuration
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.use(express.bodyParser());
+//  app.use(express.bodyParser());
+  app.use(express.json());
+  app.use(express.urlencoded());
+  
   app.use(express.methodOverride());
   app.use(require('stylus').middleware({ src: __dirname + '/public' }));
   app.use(app.router);
@@ -265,4 +269,5 @@ app.get('/login', function(req, res){
 
 app.set('domain', '0.0.0.0')
 app.listen(3006);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+console.log("Express Server Running...");
+//console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
