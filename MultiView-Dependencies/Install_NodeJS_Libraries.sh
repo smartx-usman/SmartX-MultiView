@@ -21,6 +21,9 @@
 # Last Update   : November, 2016
 
 echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] NodeJS Libraries Installing..."
+sudo npm install npm -g
 currentDir=`pwd`
-cd Visibility-Visualization\pvcT-Visualization
+cd Visibility-Visualization/pvcT-Visualization
+npm config set registry https://registry.npmjs.org/
+npm cache clean
 npm install

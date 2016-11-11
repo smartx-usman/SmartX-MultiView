@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2015 SmartX Collaboration (GIST NetCS). All rights reserved.
+# Copyright 2016 SmartX Collaboration (GIST NetCS). All rights reserved.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -18,13 +18,14 @@
 #
 # Created by    : usman@smartx.kr
 # Version       : 0.1
-# Last Update   : October, 2016
+# Last Update   : November, 2016
 
 NodeJSExist=`dpkg -l | grep  nodejs`
 if [ "$NodeJSExist" == "" ]; then
 echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] NodeJS Installing..."
 apt-get install -y nodejs npm
 ln -s /usr/bin/nodejs /usr/bin/node
+echo `node -v`
 else
 echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] NodeJS Already Installed."
 echo `node -v`

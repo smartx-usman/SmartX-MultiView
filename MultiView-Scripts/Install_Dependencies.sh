@@ -34,9 +34,10 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] wget Installing..."
 apt-get -y install wget
 fi
 
-../MultiView-Dependencies/Install_Oracle_Java.sh
-../MultiView-Dependencies/Install_InfluxDB.sh MGMT_IP
-../MultiView-Dependencies/Install_Elasticsearch.sh MGMT_IP
-../MultiView-Dependencies/Install_MongoDB.sh MGMT_IP
-../MultiView-Dependencies/Install_NodeJS.sh
-../MultiView-Dependencies/Install_NodeJS_Libraries.sh
+MultiView-Dependencies/Install_Oracle_Java.sh
+MultiView-Dependencies/Install_InfluxDB.sh MGMT_IP
+MultiView-Dependencies/Install_Elasticsearch.sh MGMT_IP
+MultiView-Dependencies/Install_MongoDB.sh MGMT_IP
+MultiView-Dependencies/Install_NodeJS.sh
+MultiView-Dependencies/Install_Kafka.sh
+MultiView-Dependencies/Install_NodeJS_Libraries.sh

@@ -27,6 +27,7 @@ if [ "$influxdb" == "" ]; then
 echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] InfluxDB Installing..."
 wget --secure-protocol=TLSv1 https://dl.influxdata.com/influxdb/releases/influxdb_1.0.2_amd64.deb
 sudo dpkg -i influxdb_1.0.2_amd64.deb
+rm -rf influxdb_1.0.2_amd64.deb
 echo `influx -version`
 else
 echo -e "\n[$(date '+%Y-%m-%d %H:%M:%S')][INFO][INSTALL] InfluxDB Already Installed."
