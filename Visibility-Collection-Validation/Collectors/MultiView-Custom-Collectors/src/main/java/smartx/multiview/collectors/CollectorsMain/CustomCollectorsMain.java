@@ -11,19 +11,6 @@ import smartx.multiview.collectors.resource.*;
 
 public class CustomCollectorsMain 
 {
-	/*private static String dbHost                       = "103.22.221.55";
-	private static int    dbPort                       = 27017;
-	private static String dbName                       = "smartxdb";
-	private static String OPENSTACK_PASSWORD           = "secrete";
-	private static String OPENSTACK_USER_ID            = "admin";
-	private static String OPENSTACK_PROJECT_ID         = "demo";
-	private static String OPENSTACK_ENDPOINT           = "http://103.22.221.51:5000/v2.0";
-	private static String devopscontrollers            = "103.22.221.152";
-	private static String ControllerPassword           = "admin";
-	private static String ControllerUser               = "admin";
-	private static String SmartXBox_USER               = "root";
-	private static String SmartXBox_PASSWORD           = "root";*/
-	
 	private static String VISIBILITY_CENTER;
 	private static String MONGO_DB_HOST;
 	private static int    MONGO_DB_PORT;
@@ -52,7 +39,6 @@ public class CustomCollectorsMain
 				
     public static void main( String[] args )
     {
-    	
     	Properties prop = new Properties();
     	InputStream input = null;
     	try {
